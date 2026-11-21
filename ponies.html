@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Little Ponies  API</title>
+
+       <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background: linear-gradient(135deg, #fff0f6, #f0eaff);
+            color: #51445f;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px 35px;
+            background: linear-gradient(135deg, #e9b8d4, #c9b6ee);
+            color: white;
+            border-radius: 0 0 40px 40px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        #ponyList {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        #ponyList li {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(100, 70, 120, 0.10);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #ponyList li:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(100, 70, 120, 0.18);
+        }
+
+        #ponyList h2 {
+            color: #b36b9b;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        #ponyList p {
+            text-align: left;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        #ponyList img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin-top: 15px;
+            border-radius: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 40px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #947b9e;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+    <br><h1>Ponies API</h1> <br>
+
+    <ul id="ponyList"></ul>
+
+    <script>
+        let url = "http://ponyapi.net/v1/";
+        let ponyList = document.getElementById("ponyList");
+
+         async function fetchPonies() {
+
+            const response = await fetch(url + "character/all");
+            console.log(response);
+
+            const data = await response.json();
+            console.log(data);
+
+            data.data.forEach((item) => {
+                console.log(item.name);
+                console.log(item.sex);
+                console.log(item.kind);
+
+                ponyList.innerHTML += `
+                
+                <li>
+                    <h2>${item.name}</h2>
+                    <p><strong>Alias:</strong> ${item.alias || "Unknown"}</p>
+                    <p><strong>Sex:</strong> ${item.sex || "Unknown"}</p>
+                    <p><strong>Kind:</strong> ${item.kind?.join(", ") || "Unknown"}</p>
+
+                <img src="${item.image?.[0] || ""}" alt="${item.name}">
+                </li>`;
+            });
+    
+        }
+        fetchPonies();
+    
+
+    </script>
+
+
+
+</body>
+</html>
